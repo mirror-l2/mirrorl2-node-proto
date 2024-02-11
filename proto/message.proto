@@ -1,0 +1,65 @@
+syntax = "proto3";
+package message;
+
+import "google/protobuf/timestamp.proto";
+option go_package = "golang/message";
+
+
+message Operation {
+  string nodeId = 1;
+  uint64 nonce = 2;
+  bytes signature = 3;
+
+  google.protobuf.Timestamp timestamp = 9;
+
+  oneof operation {
+    Init init = 10;
+    Heartbeat heartbeat = 11;
+    WithdrawRequest withdrawRequest = 12;
+    DepositSignature depositSignature = 13;
+    WithdrawSignature withdrawSignature = 14;
+  }
+}
+
+message Init {
+  bytes btcPubKey = 1;
+  bytes signature = 2;
+}
+
+message Heartbeat {
+  bytes payload = 1;
+}
+
+message WithdrawRequest {
+  int32 groupId = 1;
+  int32 receiptId = 2;
+  string recipient = 3;
+  uint64 amount = 4;
+}
+
+message DepositSignature {
+  int32 receiptId = 1;
+  int32 groupId = 2;
+  string recipient = 3;
+  uint64 amount = 4;
+  string txId = 5;
+  int32 blockHeight = 6;
+  bytes signature = 7;
+}
+
+message WithdrawSignature {
+  int32 receiptId = 1;
+  bytes signature = 2;
+}
+
+message Withdraw {
+  int32 receiptId = 1;
+  int32 groupId = 2;
+  string recipient = 3;
+  uint64 amount = 4;
+  string status = 5;
+  string redeemScript = 6;
+  string paymentRaw = 7;
+  google.protobuf.Timestamp createdAt = 8;
+  bytes applyHash = 9;
+}
